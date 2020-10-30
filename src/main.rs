@@ -1,8 +1,11 @@
+extern crate colored;
+use colored::*;
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 use chrono::prelude::*;
 use chrono::Month;
 use num_traits::FromPrimitive;
+
 
 #[derive(Debug, Clone)]
 struct Assignment {
@@ -48,13 +51,27 @@ impl Assignment {
         }
     }
 
-    // return date to human string form and return string representing assignment
+    // return date to string form and return string representing assignment
     pub fn format_assignment(&self) -> String {
+        let course = match self.course.as_str() {
+            "DBMS:" => self.course.green(),
+            "Psych:" => self.course.magenta(),
+            "Micro:" => self.course.cyan(),
+            "Architecture:" => self.course.blue(),
+            "Systems:" => self.course.red(),
+            "Life:" => self.course.yellow(),
+            _ => self.course.bold()
+        };
+
+        if self.date == None {
+            format!("{} {}\n", self.course, self.name);
+        }
+
         let date = self.date.unwrap();
         let month = Month::from_u32(date.month()).unwrap();
         let weekday = date.weekday();
         let day = date.day();
-        return format!("{} {} - {} {:?} {}", self.course, self.name, weekday, month, day)
+        format!("{} {} - {} {:?} {}", course, self.name, weekday, month, day)
     }
 }
 
@@ -101,7 +118,7 @@ fn main() -> io::Result<()> {
 
     for a in assignments.iter() {
         if a.date == None {
-            println!("{} {}\n", a.course, a.name);
+            println!("{} {}\n", a.course.yellow(), a.name);
         }
     }
 
