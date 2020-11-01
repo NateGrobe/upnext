@@ -71,7 +71,14 @@ impl Assignment {
         let month = Month::from_u32(date.month()).unwrap();
         let weekday = date.weekday();
         let day = date.day();
-        format!("{} {} - {} {:?} {}", course, self.name, weekday, month, day)
+        let today = Utc::now();
+
+        // checks to see if assignment is due today and if so change date to "Today"
+        if Month::from_u32(today.month()).unwrap() == month && today.day() == day && today.weekday() == weekday {
+            format!("{} {} - {}", course, self.name, "Today".red())
+        } else {
+            format!("{} {} - {} {:?} {}", course, self.name, weekday, month, day)
+        }
     }
 }
 
