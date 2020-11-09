@@ -54,7 +54,7 @@ impl Assignment {
     // return date to string form and return string representing assignment
     pub fn format_assignment(&self) -> String {
         let course = match self.course.as_str() {
-            "DBMS:" => self.course.green(),
+            "DMS:" => self.course.green(),
             "Psych:" => self.course.magenta(),
             "Micro:" => self.course.cyan(),
             "Architecture:" => self.course.blue(),
@@ -71,7 +71,8 @@ impl Assignment {
         let month = Month::from_u32(date.month()).unwrap();
         let weekday = date.weekday();
         let day = date.day();
-        let today = Utc::now();
+        let today = Local::now();
+
 
         // checks to see if assignment is due today and if so change date to "Today"
         if Month::from_u32(today.month()).unwrap() == month && today.day() == day && today.weekday() == weekday {
